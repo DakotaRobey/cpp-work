@@ -1,16 +1,19 @@
 #ifndef OCEAN_H
 #define OCEAN_H
+#include "ship.h"
 
 
 class ocean
 {
     public:
         ocean();
-        virtual ~ocean();
+        bool getShot(int,int);
+        int shotsFired(int,int);
+        void draw();
     protected:
     private:
-        boolean shots[][];
-        ship ships[];
+        bool shots[10][10];
+
 };
 
 #endif // OCEAN_H

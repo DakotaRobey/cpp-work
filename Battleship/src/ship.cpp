@@ -1,11 +1,18 @@
 #include "ship.h"
 
-ship::ship(int size)
+ship::ship(int length)
 {
-    //ctor
+    sSize = length;
+    hitPoints = sSize;
+    destroyed = false;
 }
 
-ship::~ship()
+bool ship::getDestroyed()
 {
-    //dtor
+    return destroyed;
+}
+
+int ship::getSize()
+{
+    return hitPoints;
 }
