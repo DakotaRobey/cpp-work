@@ -40,7 +40,7 @@ int main(int argc, char **argv)
         }
         if (redraw && al_is_event_queue_empty(queue)) {
             al_set_target_bitmap(al_get_backbuffer(display));
-            al_draw_line(100,200,300,400,yellow, 6);
+            /*al_draw_line(100,200,300,400,yellow, 6);
             float points[8] = { 0, 0, 400, 100, 50, 200, ScreenWidth, ScreenHeight };
 
             al_draw_triangle(10, 10, 20, 10, 25, 50, al_map_rgb(255, 0, 0), 1.0);
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
 
             al_draw_pixel(500, 500, electricBlue);
 
-            al_draw_spline(points, electricBlue, 1.0);
+            al_draw_spline(points, electricBlue, 1.0);*/
             al_flip_display();
         }
     }
@@ -99,7 +99,67 @@ int main(int argc, char **argv)
 */
     al_destroy_display(display);
 
-    std::cout << "test";
+    const int MAX_WRONG = 8;  // maximum number of incorrect guesses allowed
+
+    vector<string> words;  // collection of possible words to guess
+    words.push_back("GUESS");
+    words.push_back("HANGMAN");
+    words.push_back("DIFFICULT");
+
+	srand(time(0));
+    random_shuffle(words.begin(), words.end());
+    const string THE_WORD = words[0];            // word to guess
+    int wrong = 0;                               // number of incorrect guesses
+    string soFar(THE_WORD.size(), '-');          // word guessed so far
+    string used = "";                            // letters already guessed
+
+
+
+    // main loop
+    while ((wrong < MAX_WRONG) && (soFar != THE_WORD))
+    {
+        cout << "\n\nYou have " << (MAX_WRONG - wrong) << " incorrect guesses left.\n";
+        cout << "\nYou've used the following letters:\n" << used << endl;
+        cout << "\nSo far, the word is:\n" << soFar << endl;
+
+        char guess;
+        cout << "\n\nEnter your guess: ";
+        cin >> guess;
+        guess = toupper(guess); //make uppercase since secret word in uppercase
+        while (used.find(guess) != string::npos)
+        {
+            cout << "\nYou've already guessed " << guess << endl;
+            cout << "Enter your guess: ";
+            cin >> guess;
+            guess = toupper(guess);
+        }
+
+        used += guess;
+
+        if (THE_WORD.find(guess) != string::npos)
+        {
+            cout << "That's right! " << guess << " is in the word.\n";
+
+            // update soFar to include newly guessed letter
+            for (int i = 0; i < THE_WORD.length(); ++i)
+                if (THE_WORD[i] == guess)
+                    soFar[i] = guess;
+        }
+        else
+        {
+            cout << "Sorry, " << guess << " isn't in the word.\n";
+            ++wrong;
+        }
+    }
+
+    // shut down
+    if (wrong == MAX_WRONG)
+        cout << "\nYou've been hanged!";
+    else
+        cout << "\nYou guessed it!";
+
+    cout << "\nThe word was " << THE_WORD << endl;
+
     return 0;
 }
 

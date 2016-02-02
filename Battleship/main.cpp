@@ -15,6 +15,8 @@ ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *queue;
 ALLEGRO_TIMER *timer;
 
+using namespace std;
+
 int main(int argc, char **argv)
 {
     ALLEGRO_COLOR yellow = al_map_rgb(255, 255, 0);
@@ -22,6 +24,7 @@ int main(int argc, char **argv)
     init();
     queue = al_create_event_queue();
     al_register_event_source(queue, al_get_keyboard_event_source());
+    al_register_event_source(queue, al_get_mouse_event_source());
 
     timer = al_create_timer(1.0 / 60);
     al_register_event_source(queue, al_get_timer_event_source(timer));
@@ -46,7 +49,9 @@ int main(int argc, char **argv)
         if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
         {
             int x = (event.mouse.x-15)%20;
+            cout << x << endl;
             int y = (event.mouse.y-15)%20;
+            cout << y << endl;
             if ((x < 10 && x >= 0) && (y < 10 && y >= 0))
             {
                 blue.shotsFired(x,y);
