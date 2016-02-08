@@ -1,13 +1,16 @@
 #ifndef BUTTON_H
 #define BUTTON_H
+#include <string>
 
+using namespace std;
 
 class button
 {
     public:
         button();
+        button(int, int, int, int, string);
         bool isClicked();
-        void draw()
+        void draw();
     protected:
     private:
         int x;
