@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdio.h>
+#include "button.h"
 
 #include <allegro5/allegro.h>
 #include "allegro5/allegro_image.h"
@@ -16,8 +17,6 @@ ALLEGRO_TIMER *timer;
 
 int main(int argc, char **argv)
 {
-    ALLEGRO_COLOR yellow = al_map_rgb(255, 255, 0);
-    ALLEGRO_COLOR electricBlue = al_map_rgb(44, 117, 255);
     init();
     queue = al_create_event_queue();
     al_register_event_source(queue, al_get_keyboard_event_source());
@@ -30,6 +29,8 @@ int main(int argc, char **argv)
         al_wait_for_event(queue, &event);
         bool redraw = true;
 
+        button drewisghey = button(50, 50, 30, "A");
+
         if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
             break;
         if (event.type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -41,6 +42,7 @@ int main(int argc, char **argv)
         }
         if (redraw && al_is_event_queue_empty(queue)) {
             al_set_target_bitmap(al_get_backbuffer(display));
+            drewisghey.draw();
             /*al_draw_line(100,200,300,400,yellow, 6);
             float points[8] = { 0, 0, 400, 100, 50, 200, ScreenWidth, ScreenHeight };
 
