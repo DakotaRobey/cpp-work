@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1455714225 source:h:\battleship\hangman\src\main.cpp
+1455719590 source:h:\battleship\hangman\src\main.cpp
 	<iostream>
 	<stdio.h>
 	"button.h"
@@ -8,6 +8,7 @@
 	"allegro5/allegro_primitives.h"
 	"allegro5/allegro_font.h"
 	"allegro5/allegro_ttf.h"
+	<vector>
 
 1451910665 h:\codeblocksallegro-master\codeblocksallegro-master\allegro-5.0.10-mingw-4.7.0\allegro-5.0.10-mingw-4.7.0\include\allegro5\allegro.h
 	"allegro5/base.h"
@@ -246,10 +247,10 @@
 	"allegro5/allegro.h"
 	"allegro5/allegro_font.h"
 
-1455715101 source:h:\battleship\hangman\src\button.cpp
+1455719482 source:h:\battleship\hangman\src\button.cpp
 	"button.h"
 
-1455715847 h:\battleship\hangman\include\button.h
+1455719413 h:\battleship\hangman\include\button.h
 	<string>
 	<allegro5/allegro.h>
 	"allegro5/allegro_image.h"

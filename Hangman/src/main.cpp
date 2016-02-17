@@ -28,11 +28,17 @@ int main(int argc, char **argv)
     al_start_timer(timer);
 
     vector<button> buttons;
-    int x = 50;
-    for (unsigned char c = 'A'; c =< 'Z'; ++c)
+    int x = 30;
+    int y = 350;
+    for (unsigned char c = 65; c <= 90; ++c)
     {
-        buttons.push_back(button(x, 50, 30, c))
-        x += 50;
+        buttons.push_back(button(x, y, 30, string(1, c)));
+        x += 45;
+        if (x > 610)
+        {
+            x = 30;
+            y += 50;
+        }
     }
     //button drewisghey = button(50, 50, 30, "A");
 
@@ -55,6 +61,10 @@ int main(int argc, char **argv)
             al_get_mouse_state(&state);
 
             //drewisghey.draw(state);
+            for (int i = 0; i < buttons.size(); i++)
+            {
+                buttons[i].draw(state, al_mouse_button_down(&state, 1));
+            }
 
             /*al_draw_line(100,200,300,400,yellow, 6);
             float points[8] = { 0, 0, 400, 100, 50, 200, ScreenWidth, ScreenHeight };

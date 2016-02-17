@@ -18,7 +18,7 @@ class button
         button();
         button(int, int, int, string);
         bool isClicked();
-        void draw(ALLEGRO_MOUSE_STATE);
+        void draw(ALLEGRO_MOUSE_STATE, bool);
     protected:
     private:
         int x;
@@ -27,7 +27,7 @@ class button
         int width;
         string text;
         bool mouseHover;
-        bool clicked;
+        bool beenClicked;
         ALLEGRO_FONT *font;
         ALLEGRO_MOUSE_STATE mouse;
 

@@ -6,7 +6,7 @@ button::button()
     y = 0;
     height = 30;
     text = "!";
-    clicked = false;
+    beenClicked = false;
     font = al_load_font("courbd.ttf", 20, 0);
 }
 
@@ -16,13 +16,21 @@ button::button(int xCord, int yCord, int tallness, string letter)
     y = yCord;
     height = tallness;
     text = letter;
-    clicked = false;
+    beenClicked = false;
     font = al_load_font("courbd.ttf", 2*(tallness/3), 0);
 }
 
-void button::draw(ALLEGRO_MOUSE_STATE mouse)
+void button::draw(ALLEGRO_MOUSE_STATE mouse, bool clicked)
 {
-    if ((mouse.x > x && mouse.x < x+height) && (mouse.y > y && mouse.y < y+height))
+    if (clicked)
+    {
+        beenClicked = true;
+    }
+    if (beenClicked)
+    {
+        al_draw_filled_rectangle(x, y, x+height, y+height, al_map_rgb(61, 61, 61));
+    }
+    else if ((mouse.x > x && mouse.x < x+height) && (mouse.y > y && mouse.y < y+height))
     {
         al_draw_filled_rectangle(x, y, x+height, y+height, al_map_rgb(0, 125, 255));
     }
@@ -36,5 +44,5 @@ void button::draw(ALLEGRO_MOUSE_STATE mouse)
 
 bool button::isClicked()
 {
-    return clicked;
+    return beenClicked;
 }
