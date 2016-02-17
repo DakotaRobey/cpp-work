@@ -6,6 +6,9 @@
 #include "allegro5/allegro_primitives.h"
 #include "allegro5/allegro_font.h"
 #include "allegro5/allegro_ttf.h"
+#include <iostream>
+#include <stdio.h>
+#include <vector>
 
 using namespace std;
 
@@ -15,7 +18,7 @@ class button
         button();
         button(int, int, int, string);
         bool isClicked();
-        void draw();
+        void draw(ALLEGRO_MOUSE_STATE);
     protected:
     private:
         int x;
@@ -26,6 +29,7 @@ class button
         bool mouseHover;
         bool clicked;
         ALLEGRO_FONT *font;
+        ALLEGRO_MOUSE_STATE mouse;
 
 };
 
