@@ -19,6 +19,8 @@ class button
         button(int, int, int, string);
         bool isClicked();
         void draw(ALLEGRO_MOUSE_STATE, bool);
+        void reset();
+        string getLetter();
     protected:
     private:
         int x;
@@ -30,6 +32,7 @@ class button
         bool beenClicked;
         ALLEGRO_FONT *font;
         ALLEGRO_MOUSE_STATE mouse;
+        ALLEGRO_BITMAP *img;
 
 };
 

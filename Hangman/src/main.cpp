@@ -28,24 +28,43 @@ int main(int argc, char **argv)
     al_start_timer(timer);
 
     vector<button> buttons;
-    int x = 30;
+    int x = 140;
     int y = 350;
     for (unsigned char c = 65; c <= 90; ++c)
     {
         buttons.push_back(button(x, y, 30, string(1, c)));
-        x += 45;
-        if (x > 610)
+        x += 30;
+        if (x > 500)
         {
-            x = 30;
-            y += 50;
+            x = 140;
+            y += 30;
         }
     }
-    //button drewisghey = button(50, 50, 30, "A");
+
+    const int MAX_WRONG = 8;  // maximum number of incorrect guesses allowed
+
+    vector<string> words;  // collection of possible words to guess
+    words.push_back("GUESS");
+    words.push_back("HANGMAN");
+    words.push_back("DIFFICULT");
+    words.push_back("MINESWEEPER");
+    words.push_back("ENGINEER");
+    words.push_back("EXPLOSION");
+    words.push_back("CHANCE");
+    words.push_back("");
+
+	srand(time(0));
+    random_shuffle(words.begin(), words.end());
+    string THE_WORD = words[0];            // word to guess
+    int wrong = 0;                               // number of incorrect guesses
+    string soFar(THE_WORD.size(), '-');          // word guessed so far
+    string used;
 
     while (1) {
         ALLEGRO_EVENT event;
         al_wait_for_event(queue, &event);
         bool redraw = true;
+        used = "";
 
         if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
             break;
@@ -59,38 +78,44 @@ int main(int argc, char **argv)
         if (redraw && al_is_event_queue_empty(queue)) {
             al_set_target_bitmap(al_get_backbuffer(display));
             al_get_mouse_state(&state);
+            char guess;
 
-            //drewisghey.draw(state);
             for (int i = 0; i < buttons.size(); i++)
             {
                 buttons[i].draw(state, al_mouse_button_down(&state, 1));
+                if (buttons[i].isClicked())
+                {
+                    used += buttons[i].getLetter();
+                }
             }
 
-            /*al_draw_line(100,200,300,400,yellow, 6);
-            float points[8] = { 0, 0, 400, 100, 50, 200, ScreenWidth, ScreenHeight };
 
-            al_draw_triangle(10, 10, 20, 10, 25, 50, al_map_rgb(255, 0, 0), 1.0);
-            //al_draw_filled_triangle(10, 10, 20, 10, 25, 50, al_map_rgb(255, 0, 0), 1.0);
+            guess = toupper(guess); //make uppercase since secret word in uppercase
+            while (used.find(guess) != string::npos)
+            {
+                cout << "\nYou've already guessed " << guess << endl;
+                cout << "Enter your guess: ";
+                cin >> guess;
+                guess = toupper(guess);
+            }
 
-            al_draw_rounded_rectangle(10, 10, 100, 100, 5, 5, al_map_rgb(0, 255, 0), 3);
-            //al_draw_filled_rounded_rectangle(10, 10, 100, 100, 5, 5, al_map_rgb(0, 255, 0), 3);
+            used += guess;
 
-            al_draw_rectangle(400, 400, 450, 500, al_map_rgb(255, 98, 100), 9.0);
-            //al_draw_filled_rectangle(400, 400, 450, 500, al_map_rgb(255, 98, 100), 9.0);
+            if (THE_WORD.find(guess) != string::npos)
+            {
+                cout << "That's right! " << guess << " is in the word.\n";
 
-            al_draw_circle(ScreenWidth / 2, ScreenHeight / 2, 10, al_map_rgb(255, 255, 0), 3.0);
-            //al_draw_filled_circle(ScreenWidth / 2, ScreenHeight / 2, 10, al_map_rgb(255, 255, 0), 3.0);
+                // update soFar to include newly guessed letter
+                for (int i = 0; i < THE_WORD.length(); ++i)
+                    if (THE_WORD[i] == guess)
+                        soFar[i] = guess;
+            }
+            else
+            {
+                cout << "Sorry, " << guess << " isn't in the word.\n";
+                ++wrong;
+            }
 
-            al_draw_ellipse(ScreenWidth / 2, ScreenHeight - 100, 10, 5, al_map_rgb(255, 0, 255), 4.0);
-            //al_draw_filled_ellipse(ScreenWidth / 2, ScreenHeight - 100, 10, 5, al_map_rgb(255, 0, 255), 4.0);
-
-            al_draw_arc(10, ScreenHeight - 100, 10, 0, 4.0, al_map_rgb(255, 0, 0), 2.0);
-
-            al_draw_line(100, 500, 300, 500, electricBlue, 6.0);
-
-            al_draw_pixel(500, 500, electricBlue);
-
-            al_draw_spline(points, electricBlue, 1.0);*/
             al_flip_display();
         }
     }
