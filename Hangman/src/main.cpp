@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include "button.h"
+#include <algorithm>
 
 #include <allegro5/allegro.h>
 #include "allegro5/allegro_image.h"
@@ -11,11 +12,14 @@
 //Dynamic Link
 #define ScreenWidth 640
 #define ScreenHeight 480
+
 int init();
+
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *queue;
 ALLEGRO_TIMER *timer;
 ALLEGRO_MOUSE_STATE state;
+ALLEGRO_FONT *font;
 
 int main(int argc, char **argv)
 {
@@ -26,6 +30,8 @@ int main(int argc, char **argv)
     timer = al_create_timer(1.0 / 60);
     al_register_event_source(queue, al_get_timer_event_source(timer));
     al_start_timer(timer);
+
+    font = al_load_font("courbd.ttf", 20, 0);
 
     vector<button> buttons;
     int x = 140;
@@ -58,13 +64,13 @@ int main(int argc, char **argv)
     string THE_WORD = words[0];            // word to guess
     int wrong = 0;                               // number of incorrect guesses
     string soFar(THE_WORD.size(), '-');          // word guessed so far
-    string used;
+    string used = "";
+    string draw;
 
     while (1) {
         ALLEGRO_EVENT event;
         al_wait_for_event(queue, &event);
         bool redraw = true;
-        used = "";
 
         if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
             break;
@@ -83,38 +89,30 @@ int main(int argc, char **argv)
             for (int i = 0; i < buttons.size(); i++)
             {
                 buttons[i].draw(state, al_mouse_button_down(&state, 1));
-                if (buttons[i].isClicked())
+                if ((used.find(buttons[i].getLetter()) == string::npos) && buttons[i].isHighlighted() && buttons[i].isClicked())
                 {
-                    used += buttons[i].getLetter();
+                    guess = buttons[i].getLetter()[0];
+                    guess = toupper(guess); //make uppercase since secret word in uppercase
+                    used += guess;
+                    if (THE_WORD.find(guess) != string::npos)
+                    {
+                        for (int i = 0; i < THE_WORD.length(); ++i)
+                        {
+                            if (THE_WORD[i] == guess)
+                            {
+                                soFar[i] = guess;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        wrong++;
+                    }
                 }
             }
 
-
-            guess = toupper(guess); //make uppercase since secret word in uppercase
-            while (used.find(guess) != string::npos)
-            {
-                cout << "\nYou've already guessed " << guess << endl;
-                cout << "Enter your guess: ";
-                cin >> guess;
-                guess = toupper(guess);
-            }
-
-            used += guess;
-
-            if (THE_WORD.find(guess) != string::npos)
-            {
-                cout << "That's right! " << guess << " is in the word.\n";
-
-                // update soFar to include newly guessed letter
-                for (int i = 0; i < THE_WORD.length(); ++i)
-                    if (THE_WORD[i] == guess)
-                        soFar[i] = guess;
-            }
-            else
-            {
-                cout << "Sorry, " << guess << " isn't in the word.\n";
-                ++wrong;
-            }
+            draw = "The word so far is " + soFar;
+            al_draw_text(font, al_map_rgb(255, 0, 0), 30, 30, 0, draw.c_str());
 
             al_flip_display();
         }

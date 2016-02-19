@@ -247,10 +247,10 @@
 	"allegro5/allegro.h"
 	"allegro5/allegro_font.h"
 
-1455887492 source:h:\battleship\hangman\src\button.cpp
+1455891018 source:h:\battleship\hangman\src\button.cpp
 	"button.h"
 
-1455887090 h:\battleship\hangman\include\button.h
+1455891117 h:\battleship\hangman\include\button.h
 	<string>
 	<allegro5/allegro.h>
 	"allegro5/allegro_image.h"

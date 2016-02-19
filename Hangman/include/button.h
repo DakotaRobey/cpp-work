@@ -20,6 +20,7 @@ class button
         bool isClicked();
         void draw(ALLEGRO_MOUSE_STATE, bool);
         void reset();
+        bool isHighlighted();
         string getLetter();
     protected:
     private:
