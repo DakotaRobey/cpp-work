@@ -22,6 +22,7 @@ class button
         void reset();
         bool isHighlighted();
         string getLetter();
+        void setCorrectness(bool);
     protected:
     private:
         int x;
@@ -31,6 +32,7 @@ class button
         string text;
         bool mouseHover;
         bool beenClicked;
+        bool isInWord;
         ALLEGRO_FONT *font;
         ALLEGRO_MOUSE_STATE mouse;
         ALLEGRO_BITMAP *img;

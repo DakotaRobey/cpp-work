@@ -46,7 +46,14 @@ void button::draw(ALLEGRO_MOUSE_STATE mouse, bool clicked)
     }
     if (beenClicked)
     {
-        al_draw_scaled_bitmap(img, 128, 0, 64, 64, x, y, height, height, 0);
+        if (isInWord)
+        {
+            al_draw_scaled_bitmap(img, 192, 0, 64, 64, x, y, height, height, 0);
+        }
+        else
+        {
+            al_draw_scaled_bitmap(img, 128, 0, 64, 64, x, y, height, height, 0);
+        }
     }
 }
 
@@ -68,4 +75,9 @@ void button::reset()
 string button::getLetter()
 {
     return text;
+}
+
+void button::setCorrectness(bool inWord)
+{
+    isInWord = inWord;
 }

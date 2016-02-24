@@ -20,6 +20,7 @@ ALLEGRO_EVENT_QUEUE *queue;
 ALLEGRO_TIMER *timer;
 ALLEGRO_MOUSE_STATE state;
 ALLEGRO_FONT *font;
+ALLEGRO_BITMAP *img;
 
 int main(int argc, char **argv)
 {
@@ -31,7 +32,12 @@ int main(int argc, char **argv)
     al_register_event_source(queue, al_get_timer_event_source(timer));
     al_start_timer(timer);
 
-    font = al_load_font("courbd.ttf", 20, 0);
+    font = al_load_font("courbd.ttf", 30, 0);
+    img = al_load_bitmap("Smiley Sprite Sheet.jpg");
+
+    bool title = false;
+    bool play = true;
+    bool gameOver =false;
 
     vector<button> buttons;
     int x = 140;
@@ -46,7 +52,6 @@ int main(int argc, char **argv)
             y += 30;
         }
     }
-
     const int MAX_WRONG = 8;  // maximum number of incorrect guesses allowed
 
     vector<string> words;  // collection of possible words to guess
@@ -57,7 +62,7 @@ int main(int argc, char **argv)
     words.push_back("ENGINEER");
     words.push_back("EXPLOSION");
     words.push_back("CHANCE");
-    words.push_back("");
+    words.push_back("SUNGLASSES");
 
 	srand(time(0));
     random_shuffle(words.begin(), words.end());
@@ -70,6 +75,7 @@ int main(int argc, char **argv)
     while (1) {
         ALLEGRO_EVENT event;
         al_wait_for_event(queue, &event);
+        al_clear_to_color(al_map_rgb(0,0,0));
         bool redraw = true;
 
         if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
@@ -84,35 +90,41 @@ int main(int argc, char **argv)
         if (redraw && al_is_event_queue_empty(queue)) {
             al_set_target_bitmap(al_get_backbuffer(display));
             al_get_mouse_state(&state);
-            char guess;
-
-            for (int i = 0; i < buttons.size(); i++)
+            if (play)
             {
-                buttons[i].draw(state, al_mouse_button_down(&state, 1));
-                if ((used.find(buttons[i].getLetter()) == string::npos) && buttons[i].isHighlighted() && buttons[i].isClicked())
+                al_draw_scaled_bitmap(img, 0, 0, 76, 76, 320, 150, 32, 32, 0);
+                char guess;
+                for (int i = 0; i < buttons.size(); i++)
                 {
-                    guess = buttons[i].getLetter()[0];
-                    guess = toupper(guess); //make uppercase since secret word in uppercase
-                    used += guess;
-                    if (THE_WORD.find(guess) != string::npos)
+                    buttons[i].draw(state, al_mouse_button_down(&state, 1));
+                    if ((used.find(buttons[i].getLetter()) == string::npos) && buttons[i].isHighlighted() && buttons[i].isClicked())
                     {
-                        for (int i = 0; i < THE_WORD.length(); ++i)
+                        guess = buttons[i].getLetter()[0];
+                        guess = toupper(guess); //make uppercase since secret word in uppercase
+                        used += guess;
+                        if (THE_WORD.find(guess) != string::npos)
                         {
-                            if (THE_WORD[i] == guess)
+                            buttons[i].setCorrectness(true);
+                            for (int i = 0; i < THE_WORD.length(); ++i)
                             {
-                                soFar[i] = guess;
+                                if (THE_WORD[i] == guess)
+                                {
+                                    soFar[i] = guess;
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        wrong++;
+                        else
+                        {
+                            buttons[i].setCorrectness(false);
+                            wrong++;
+                        }
                     }
                 }
+
+                draw = "The word so far is " + soFar;
+                al_draw_text(font, al_map_rgb(255, 0, 0), 30, 30, 0, draw.c_str());
             }
 
-            draw = "The word so far is " + soFar;
-            al_draw_text(font, al_map_rgb(255, 0, 0), 30, 30, 0, draw.c_str());
 
             al_flip_display();
         }
