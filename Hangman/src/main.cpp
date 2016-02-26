@@ -8,6 +8,8 @@
 #include "allegro5/allegro_primitives.h"
 #include "allegro5/allegro_font.h"
 #include "allegro5/allegro_ttf.h"
+#include "allegro5/allegro_audio.h"
+#include "allegro5/allegro_acodec.h"
 #include <vector>
 //Dynamic Link
 #define ScreenWidth 640
@@ -25,6 +27,8 @@ ALLEGRO_BITMAP *img;
 int main(int argc, char **argv)
 {
     init();
+
+    ALLEGRO_SAMPLE *explosion = al_load_sample("explode.wav");
     queue = al_create_event_queue();
     al_register_event_source(queue, al_get_keyboard_event_source());
 
@@ -33,7 +37,7 @@ int main(int argc, char **argv)
     al_start_timer(timer);
 
     font = al_load_font("courbd.ttf", 30, 0);
-    img = al_load_bitmap("Smiley Sprite Sheet.jpg");
+    img = al_load_bitmap("Smiley Sprite Sheet.png");
 
     bool title = false;
     bool play = true;
@@ -92,7 +96,6 @@ int main(int argc, char **argv)
             al_get_mouse_state(&state);
             if (play)
             {
-                al_draw_scaled_bitmap(img, 0, 0, 76, 76, 320, 150, 32, 32, 0);
                 char guess;
                 for (int i = 0; i < buttons.size(); i++)
                 {
@@ -117,85 +120,25 @@ int main(int argc, char **argv)
                         {
                             buttons[i].setCorrectness(false);
                             wrong++;
+                            al_play_sample(explosion, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
                         }
                     }
                 }
-
                 draw = "The word so far is " + soFar;
                 al_draw_text(font, al_map_rgb(255, 0, 0), 30, 30, 0, draw.c_str());
+                if (wrong <= 8)
+                {
+                    al_draw_scaled_bitmap(img, 72, 72, 72, 72, 260, 130, 64, 64, 0);
+                    if (wrong <= 7)
+                    {
+                        al_draw_line(306, 183, 306, 256, al_map_rgb(255, 255, 255), 3);
+                    }
+                }
             }
-
-
             al_flip_display();
         }
     }
     al_destroy_display(display);
-
-    /*const int MAX_WRONG = 8;  // maximum number of incorrect guesses allowed
-
-    vector<string> words;  // collection of possible words to guess
-    words.push_back("GUESS");
-    words.push_back("HANGMAN");
-    words.push_back("DIFFICULT");
-    words.push_back("MINESWEEPER");
-    words.push_back("ENGINEER");
-    words.push_back("EXPLOSION");
-    words.push_back("CHANCE");
-    words.push_back("");
-
-	srand(time(0));
-    random_shuffle(words.begin(), words.end());
-    const string THE_WORD = words[0];            // word to guess
-    int wrong = 0;                               // number of incorrect guesses
-    string soFar(THE_WORD.size(), '-');          // word guessed so far
-    string used = "";                            // letters already guessed
-
-
-
-    // main loop
-    while ((wrong < MAX_WRONG) && (soFar != THE_WORD))
-    {
-        cout << "\n\nYou have " << (MAX_WRONG - wrong) << " incorrect guesses left.\n";
-        cout << "\nYou've used the following letters:\n" << used << endl;
-        cout << "\nSo far, the word is:\n" << soFar << endl;
-
-        char guess;
-        cout << "\n\nEnter your guess: ";
-        cin >> guess;
-        guess = toupper(guess); //make uppercase since secret word in uppercase
-        while (used.find(guess) != string::npos)
-        {
-            cout << "\nYou've already guessed " << guess << endl;
-            cout << "Enter your guess: ";
-            cin >> guess;
-            guess = toupper(guess);
-        }
-
-        used += guess;
-
-        if (THE_WORD.find(guess) != string::npos)
-        {
-            cout << "That's right! " << guess << " is in the word.\n";
-
-            // update soFar to include newly guessed letter
-            for (int i = 0; i < THE_WORD.length(); ++i)
-                if (THE_WORD[i] == guess)
-                    soFar[i] = guess;
-        }
-        else
-        {
-            cout << "Sorry, " << guess << " isn't in the word.\n";
-            ++wrong;
-        }
-    }
-
-    // shut down
-    if (wrong == MAX_WRONG)
-        cout << "\nYou've been hanged!";
-    else
-        cout << "\nYou guessed it!";
-
-    cout << "\nThe word was " << THE_WORD << endl;*/
 
     return 0;
 }
@@ -223,4 +166,7 @@ int init(){
     al_init_ttf_addon();
     al_install_mouse();
     al_install_keyboard();
+    al_install_audio();
+    al_init_acodec_addon();
+    al_reserve_samples(5);
 }
