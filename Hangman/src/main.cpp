@@ -22,8 +22,8 @@ ALLEGRO_EVENT_QUEUE *queue;
 ALLEGRO_TIMER *timer;
 ALLEGRO_MOUSE_STATE state;
 ALLEGRO_FONT *font;
+ALLEGRO_FONT *smallFont;
 ALLEGRO_BITMAP *img;
-;
 
 int main(int argc, char **argv)
 {
@@ -38,11 +38,12 @@ int main(int argc, char **argv)
     al_start_timer(timer);
 
     font = al_load_font("courbd.ttf", 30, 0);
+    smallFont = al_load_font("courbd.ttf", 20, 0);
     img = al_load_bitmap("Smiley Sprite Sheet.png");
     ALLEGRO_BITMAP *background = al_load_bitmap("background.jpg");
 
-    bool title = false;
-    bool play = true;
+    bool title = true;
+    bool play = false;
     bool gameOver =false;
 
     vector<button> buttons;
@@ -90,16 +91,35 @@ int main(int argc, char **argv)
             if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
                 break;
         }
+        if (title && event.type == ALLEGRO_EVENT_KEY_DOWN)
+        {
+            if (event.keyboard.keycode == ALLEGRO_KEY_ENTER)
+            {
+                title = false;
+                play = true;
+            }
+        }
         if (event.type == ALLEGRO_EVENT_TIMER){
             redraw = true;
         }
         if (redraw && al_is_event_queue_empty(queue)) {
             al_set_target_bitmap(al_get_backbuffer(display));
             al_get_mouse_state(&state);
+            al_draw_scaled_bitmap(background, 0, 0, 1280, 1024, 0, 0, ScreenWidth, ScreenHeight, 0);
+            if (title)
+            {
+                al_draw_text(font, al_map_rgb(225, 0, 0), 230, 160, 0, "Welcome to Hangman!");
+                al_draw_text(smallFont, al_map_rgb(225, 0, 0), 470, 220, ALLEGRO_ALIGN_CENTER, "Click the letters at the bottom");
+                al_draw_text(smallFont, al_map_rgb(225, 0, 0), 470, 250, ALLEGRO_ALIGN_CENTER, "and try to guess the word");
+                al_draw_text(smallFont, al_map_rgb(225, 0, 0), 470, 290, ALLEGRO_ALIGN_CENTER, "You gain points for every every correct letter guess");
+                al_draw_text(smallFont, al_map_rgb(225, 0, 0), 470, 320, ALLEGRO_ALIGN_CENTER, "You lose point for every wrong letter guess");
+                al_draw_text(smallFont, al_map_rgb(225, 0, 0), 470, 360, ALLEGRO_ALIGN_CENTER, "You win when you guess all the words");
+                al_draw_text(smallFont, al_map_rgb(225, 0, 0), 470, 390, ALLEGRO_ALIGN_CENTER, "You lose when you get 8 incorrect letter guesses on the same word");
+                al_draw_text(smallFont, al_map_rgb(225, 0, 0), 470, 450, ALLEGRO_ALIGN_CENTER, "Press enter to start");
+            }
             if (play)
             {
                 char guess;
-                al_draw_scaled_bitmap(background, 0, 0, 1280, 1024, 0, 0, ScreenWidth, ScreenHeight, 0);
                 for (int i = 0; i < buttons.size(); i++)
                 {
                     buttons[i].draw(state, al_mouse_button_down(&state, 1));
@@ -129,14 +149,14 @@ int main(int argc, char **argv)
                 }
                 draw = "The word so far is " + soFar;
                 al_draw_text(font, al_map_rgb(225, 0, 0), 200, 160, 0, draw.c_str());
-                if (wrong <= 8)
+                /*if (wrong <= 8)
                 {
                     al_draw_scaled_bitmap(img, 72, 72, 72, 72, 260, 130, 64, 64, 0);
                     if (wrong <= 7)
                     {
                         al_draw_line(303, 187, 303, 256, al_map_rgb(255, 255, 255), 3);
                     }
-                }
+                }*/
             }
             al_flip_display();
         }
