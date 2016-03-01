@@ -12,8 +12,8 @@
 #include "allegro5/allegro_acodec.h"
 #include <vector>
 //Dynamic Link
-#define ScreenWidth 640
-#define ScreenHeight 480
+#define ScreenWidth 1024
+#define ScreenHeight 768
 
 int init();
 
@@ -23,6 +23,7 @@ ALLEGRO_TIMER *timer;
 ALLEGRO_MOUSE_STATE state;
 ALLEGRO_FONT *font;
 ALLEGRO_BITMAP *img;
+;
 
 int main(int argc, char **argv)
 {
@@ -38,21 +39,22 @@ int main(int argc, char **argv)
 
     font = al_load_font("courbd.ttf", 30, 0);
     img = al_load_bitmap("Smiley Sprite Sheet.png");
+    ALLEGRO_BITMAP *background = al_load_bitmap("background.jpg");
 
     bool title = false;
     bool play = true;
     bool gameOver =false;
 
     vector<button> buttons;
-    int x = 140;
-    int y = 350;
+    int x = 250;
+    int y = 546;
     for (unsigned char c = 65; c <= 90; ++c)
     {
         buttons.push_back(button(x, y, 30, string(1, c)));
         x += 30;
-        if (x > 500)
+        if (x > 610)
         {
-            x = 140;
+            x = 250;
             y += 30;
         }
     }
@@ -97,6 +99,7 @@ int main(int argc, char **argv)
             if (play)
             {
                 char guess;
+                al_draw_scaled_bitmap(background, 0, 0, 1280, 1024, 0, 0, ScreenWidth, ScreenHeight, 0);
                 for (int i = 0; i < buttons.size(); i++)
                 {
                     buttons[i].draw(state, al_mouse_button_down(&state, 1));
@@ -125,13 +128,13 @@ int main(int argc, char **argv)
                     }
                 }
                 draw = "The word so far is " + soFar;
-                al_draw_text(font, al_map_rgb(255, 0, 0), 30, 30, 0, draw.c_str());
+                al_draw_text(font, al_map_rgb(225, 0, 0), 200, 160, 0, draw.c_str());
                 if (wrong <= 8)
                 {
                     al_draw_scaled_bitmap(img, 72, 72, 72, 72, 260, 130, 64, 64, 0);
                     if (wrong <= 7)
                     {
-                        al_draw_line(306, 183, 306, 256, al_map_rgb(255, 255, 255), 3);
+                        al_draw_line(303, 187, 303, 256, al_map_rgb(255, 255, 255), 3);
                     }
                 }
             }
@@ -150,7 +153,7 @@ int init(){
         fprintf(stderr, "failed to initialize allegro!\n");
         return -1;
     }
-    display = al_create_display(640, 480);
+    display = al_create_display(ScreenWidth, ScreenHeight);
     if(!display)
     {
         fprintf(stderr, "failed to create display!\n");
