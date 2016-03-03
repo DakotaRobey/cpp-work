@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include "button.h"
+#include "explosion.h"
 #include <algorithm>
 
 #include <allegro5/allegro.h>
@@ -29,7 +30,7 @@ int main(int argc, char **argv)
 {
     init();
 
-    ALLEGRO_SAMPLE *explosion = al_load_sample("explode.wav");
+    ALLEGRO_SAMPLE *explosionNoise = al_load_sample("explode.wav");
     queue = al_create_event_queue();
     al_register_event_source(queue, al_get_keyboard_event_source());
 
@@ -41,6 +42,7 @@ int main(int argc, char **argv)
     smallFont = al_load_font("courbd.ttf", 20, 0);
     img = al_load_bitmap("Smiley Sprite Sheet.png");
     ALLEGRO_BITMAP *background = al_load_bitmap("background.jpg");
+    explosion drewisghey = explosion(400, 300, 64);
 
     bool title = true;
     bool play = false;
@@ -143,20 +145,40 @@ int main(int argc, char **argv)
                         {
                             buttons[i].setCorrectness(false);
                             wrong++;
-                            al_play_sample(explosion, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                            al_play_sample(explosionNoise, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                            //drewisghey.draw();
                         }
                     }
                 }
                 draw = "The word so far is " + soFar;
                 al_draw_text(font, al_map_rgb(225, 0, 0), 200, 160, 0, draw.c_str());
-                /*if (wrong <= 8)
+                if (wrong <= 8)
                 {
-                    al_draw_scaled_bitmap(img, 72, 72, 72, 72, 260, 130, 64, 64, 0);
+                    al_draw_scaled_bitmap(img, 72, 72, 72, 72, 400, 200, 64, 64, 0);
                     if (wrong <= 7)
                     {
                         al_draw_line(303, 187, 303, 256, al_map_rgb(255, 255, 255), 3);
+                        if (wrong <= 6)
+                        {
+                            if (wrong <= 5)
+                            {
+                                if (wrong <= 4)
+                                {
+                                    if (wrong <= 3)
+                                    {
+                                        if (wrong <= 2)
+                                        {
+                                            if (wrong <= 1)
+                                            {
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
-                }*/
+                }
             }
             al_flip_display();
         }
