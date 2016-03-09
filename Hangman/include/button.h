@@ -23,6 +23,8 @@ class button
         bool isHighlighted();
         string getLetter();
         void setCorrectness(bool);
+        int getX();
+        int getY();
     protected:
     private:
         int x;

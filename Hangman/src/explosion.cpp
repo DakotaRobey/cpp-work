@@ -6,18 +6,11 @@ explosion::explosion()
     y = 0;
     width = 64;
     parent = al_load_bitmap("explosion spritesheet.png");
-    frame = 0;
+    frameX = 0;
+    frameY = 0;
     frameDelay = 2;
     frameCount = 0;
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            frames[frame] = al_create_sub_bitmap(parent, j*56, i*56, 56, 56);
-            frame++;
-        }
-    }
-    frame = 0;
+    play = false;
 }
 
 explosion::explosion(int drawX, int drawY, int sideLength)
@@ -26,31 +19,42 @@ explosion::explosion(int drawX, int drawY, int sideLength)
     y = drawY;
     width = sideLength;
     parent = al_load_bitmap("explosion spritesheet.png");
-    frame = 0;
-    frameDelay = 2;
+    frameX = 0;
+    frameY = 0;
+    frameDelay = 3;
     frameCount = 0;
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            frames[frame] = al_create_sub_bitmap(parent, j*56, i*56, 56, 56);
-            frame++;
-        }
-    }
-    frame = 0;
+    play = false;
 }
 
 void explosion::draw()
 {
-    if (frameCount <= frameDelay)
+    if (play)
     {
-        al_draw_scaled_bitmap(frames[frame], 0, 0, 56, 56, x, y, width, width, 0);
-        frameCount++;
+        al_draw_scaled_bitmap(parent, frameX*56, frameY*56, 56, 56, x, y, width, width, 0);
+        if (frameCount <= frameDelay)
+        {
+            frameCount++;
+        }
+        else
+        {
+            frameX++;
+            if (frameX == 4)
+            {
+                frameX = 0;
+                frameY++;
+            }
+            frameCount = 0;
+        }
     }
-    else
+    if (frameY == 4)
     {
-        frame++;
-        al_draw_scaled_bitmap(frames[frame], 0, 0, 56, 56, x, y, width, width, 0);
-        frameCount = 0;
+        play = false;
+        frameX = 0;
+        frameY = 0;
     }
+}
+
+void explosion::startDraw()
+{
+    play = true;
 }

@@ -18,16 +18,18 @@ class explosion
         explosion();
         explosion(int, int, int);
         void draw();
+        void startDraw();
     protected:
     private:
         int x;
         int y;
         int width;
         ALLEGRO_BITMAP *parent;
-        int frame;
+        int frameX;
+        int frameY;
         int frameDelay;
         int frameCount;
-        std::vector<ALLEGRO_BITMAP*> frames;
+        bool play;
 };
 
 #endif // EXPLOSION_H

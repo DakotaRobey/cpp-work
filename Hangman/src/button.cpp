@@ -81,3 +81,13 @@ void button::setCorrectness(bool inWord)
 {
     isInWord = inWord;
 }
+
+int button::getX()
+{
+    return x;
+}
+
+int button::getY()
+{
+    return y;
+}

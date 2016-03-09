@@ -39,7 +39,9 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="include/button.h" />
+		<Unit filename="include/explosion.h" />
 		<Unit filename="src/button.cpp" />
+		<Unit filename="src/explosion.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Extensions>
 			<code_completion />

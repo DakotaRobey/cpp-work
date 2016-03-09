@@ -31,6 +31,7 @@ int main(int argc, char **argv)
     init();
 
     ALLEGRO_SAMPLE *explosionNoise = al_load_sample("explode.wav");
+    ALLEGRO_SAMPLE *startSound = al_load_sample("XP Closing sound.wav");
     queue = al_create_event_queue();
     al_register_event_source(queue, al_get_keyboard_event_source());
 
@@ -42,11 +43,12 @@ int main(int argc, char **argv)
     smallFont = al_load_font("courbd.ttf", 20, 0);
     img = al_load_bitmap("Smiley Sprite Sheet.png");
     ALLEGRO_BITMAP *background = al_load_bitmap("background.jpg");
-    explosion drewisghey = explosion(400, 300, 64);
+    explosion drewisghey = explosion(410, 420, 64);;
 
     bool title = true;
     bool play = false;
     bool gameOver =false;
+    bool playerWin;
 
     vector<button> buttons;
     int x = 250;
@@ -75,11 +77,14 @@ int main(int argc, char **argv)
 
 	srand(time(0));
     random_shuffle(words.begin(), words.end());
-    string THE_WORD = words[0];            // word to guess
+    int curWord = 0;
+    string THE_WORD = words[curWord];            // word to guess
     int wrong = 0;                               // number of incorrect guesses
     string soFar(THE_WORD.size(), '-');          // word guessed so far
     string used = "";
     string draw;
+    int wordsRight = 0;
+    al_play_sample(startSound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 
     while (1) {
         ALLEGRO_EVENT event;
@@ -122,6 +127,7 @@ int main(int argc, char **argv)
             if (play)
             {
                 char guess;
+                drewisghey.draw();
                 for (int i = 0; i < buttons.size(); i++)
                 {
                     buttons[i].draw(state, al_mouse_button_down(&state, 1));
@@ -146,31 +152,52 @@ int main(int argc, char **argv)
                             buttons[i].setCorrectness(false);
                             wrong++;
                             al_play_sample(explosionNoise, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-                            //drewisghey.draw();
+                            drewisghey.startDraw();
                         }
                     }
                 }
                 draw = "The word so far is " + soFar;
                 al_draw_text(font, al_map_rgb(225, 0, 0), 200, 160, 0, draw.c_str());
+                if (THE_WORD.compare(soFar) == 0)
+                {
+                    curWord++;
+                    THE_WORD = words[curWord];
+                    wrong = 0;
+                    soFar = string(THE_WORD.size(), '-');
+                    used = "";
+                    wordsRight++;
+                    for (int i = 0; i < buttons.size(); i++)
+                    {
+                        buttons[i].reset();
+                    }
+                }
+                int headX;
+                int headY;
                 if (wrong <= 8)
                 {
-                    al_draw_scaled_bitmap(img, 72, 72, 72, 72, 400, 200, 64, 64, 0);
+                    headX = 1;
+                    headY = 1;
                     if (wrong <= 7)
                     {
-                        al_draw_line(303, 187, 303, 256, al_map_rgb(255, 255, 255), 3);
+                        al_draw_line(440, 264, 440, 364, al_map_rgb(255, 255, 255), 3);
                         if (wrong <= 6)
                         {
+                            headY = 0;
                             if (wrong <= 5)
                             {
+                                al_draw_line(440, 304, 480, 294, al_map_rgb(255, 255, 255), 3);
                                 if (wrong <= 4)
                                 {
+                                    al_draw_line(440, 304, 400, 294, al_map_rgb(255, 255, 255), 3);
                                     if (wrong <= 3)
                                     {
+                                        headX = 0;
                                         if (wrong <= 2)
                                         {
+                                            al_draw_line(440, 364, 470, 400, al_map_rgb(255, 255, 255), 3);
                                             if (wrong <= 1)
                                             {
-
+                                                al_draw_line(440, 364, 410, 400, al_map_rgb(255, 255, 255), 3);
                                             }
                                         }
                                     }
@@ -178,7 +205,18 @@ int main(int argc, char **argv)
                             }
                         }
                     }
+                    al_draw_scaled_bitmap(img, headX*72, headY*72, 72, 72, 400, 200, 64, 64, 0);
                 }
+                if (wrong == 8)
+                {
+                    play = false;
+                    gameOver = true;
+                }
+            }
+            if (gameOver)
+            {
+                al_draw_text(font, al_map_rgb(225, 0, 0), 230, 160, 0, "You lost!");
+                al_draw_textf(smallFont, al_map_rgb(225, 0, 0), 470, 500, ALLEGRO_ALIGN_CENTER, "You got %d words right", wordsRight);
             }
             al_flip_display();
         }
