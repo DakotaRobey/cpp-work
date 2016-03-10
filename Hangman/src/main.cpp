@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     smallFont = al_load_font("courbd.ttf", 20, 0);
     img = al_load_bitmap("Smiley Sprite Sheet.png");
     ALLEGRO_BITMAP *background = al_load_bitmap("background.jpg");
-    explosion drewisghey = explosion(410, 420, 64);;
+    explosion explosAnimation = explosion(410, 420, 64);;
 
     bool title = true;
     bool play = false;
@@ -127,7 +127,7 @@ int main(int argc, char **argv)
             if (play)
             {
                 char guess;
-                drewisghey.draw();
+                explosAnimation.draw();
                 for (int i = 0; i < buttons.size(); i++)
                 {
                     buttons[i].draw(state, al_mouse_button_down(&state, 1));
@@ -152,7 +152,7 @@ int main(int argc, char **argv)
                             buttons[i].setCorrectness(false);
                             wrong++;
                             al_play_sample(explosionNoise, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-                            drewisghey.startDraw();
+                            explosAnimation.startDraw();
                         }
                     }
                 }
