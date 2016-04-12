@@ -38,6 +38,8 @@
 		</Compiler>
 		<Unit filename="background.cpp" />
 		<Unit filename="background.h" />
+		<Unit filename="floater.cpp" />
+		<Unit filename="floater.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

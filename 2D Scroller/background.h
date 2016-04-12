@@ -5,16 +5,21 @@
 #include "allegro5/allegro_primitives.h"
 #include "allegro5/allegro_font.h"
 #include "allegro5/allegro_ttf.h"
+#include <vector>
+#include "floater.h"
 
 class background
 {
     public:
         background();
-        virtual ~background();
         void draw();
+        void addSprite();
+        int numSprites();
     protected:
     private:
         ALLEGRO_BITMAP *img;
+        int camX;
+        std::vector<floater> sprites;
 };
 
 #endif // BACKGROUND_H
