@@ -15,6 +15,7 @@ class floater
     public:
         floater(int, int);
         void draw();
+        int getX();
     protected:
     private:
         int x;

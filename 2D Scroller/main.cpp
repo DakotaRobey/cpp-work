@@ -13,9 +13,13 @@ int init();
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *queue;
 ALLEGRO_TIMER *timer;
+ALLEGRO_KEYBOARD_STATE *key;
+
+using namespace std;
 
 int main(int argc, char **argv)
 {
+    cout << "Keyboard state created" << endl;
     ALLEGRO_COLOR yellow = al_map_rgb(255, 255, 0);
     ALLEGRO_COLOR electricBlue = al_map_rgb(44, 117, 255);
     init();
@@ -34,6 +38,8 @@ int main(int argc, char **argv)
     while (1) {
         ALLEGRO_EVENT event;
         al_wait_for_event(queue, &event);
+        al_get_keyboard_state(key);
+        cout << "keyboard state saved" << endl;
         bool redraw = true;
 
         if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
@@ -41,6 +47,14 @@ int main(int argc, char **argv)
         if (event.type == ALLEGRO_EVENT_KEY_DOWN) {
             if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
                 break;
+        }
+        if (al_key_down(key, ALLEGRO_KEY_UP))
+        {
+            ocean.movePlayer(-8);
+        }
+        if (al_key_down(key, ALLEGRO_KEY_DOWN))
+        {
+            ocean.movePlayer(8);
         }
         if (event.type == ALLEGRO_EVENT_TIMER){
             redraw = true;

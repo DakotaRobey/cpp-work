@@ -14,12 +14,15 @@ class background
         background();
         void draw();
         void addSprite();
+        void movePlayer(int);
         int numSprites();
     protected:
     private:
         ALLEGRO_BITMAP *img;
+        ALLEGRO_BITMAP *player;
         int camX;
         std::vector<floater> sprites;
+        int playerY;
 };
 
 #endif // BACKGROUND_H

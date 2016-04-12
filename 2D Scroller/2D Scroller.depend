@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1460464139 source:h:\battleship\2d scroller\background.cpp
+1460468345 source:h:\battleship\2d scroller\background.cpp
 	"background.h"
 
-1460464139 h:\battleship\2d scroller\background.h
+1460468345 h:\battleship\2d scroller\background.h
 	<allegro5/allegro.h>
 	"allegro5/allegro_image.h"
 	"allegro5/allegro_primitives.h"
@@ -248,7 +248,7 @@
 	"allegro5/allegro.h"
 	"allegro5/allegro_font.h"
 
-1460464139 source:h:\battleship\2d scroller\main.cpp
+1460469441 source:h:\battleship\2d scroller\main.cpp
 	<iostream>
 	<stdio.h>
 	<allegro5/allegro.h>
@@ -258,7 +258,7 @@
 	"allegro5/allegro_ttf.h"
 	"background.h"
 
-1460464639 h:\battleship\2d scroller\floater.h
+1460467432 h:\battleship\2d scroller\floater.h
 	<stdio.h>
 	<stdlib.h>
 	<time.h>
@@ -269,6 +269,6 @@
 	"allegro5/allegro_ttf.h"
 	"iostream"
 
-1460120307 source:h:\battleship\2d scroller\floater.cpp
+1460468490 source:h:\battleship\2d scroller\floater.cpp
 	"floater.h"
 
