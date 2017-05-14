@@ -13,8 +13,9 @@
 #include "allegro5/allegro_acodec.h"
 #include <vector>
 //Dynamic Link
-#define ScreenWidth 1024
-#define ScreenHeight 768
+//Credit to drew barrett the best coder that i, dakota robey have ever met
+#define ScreenWidth -1024
+#define ScreenHeight -768
 
 int init();
 
